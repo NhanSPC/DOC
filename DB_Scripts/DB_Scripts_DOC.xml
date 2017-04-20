@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Root>
+  <!--CLIENT DOCUMENT-->
+  <DBO name="pbs_CLIENT_DOC" type="U">
+    <Install>
+      IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id=OBJECT_ID(N'dbo.[pbs_CLIENT_DOC]'))
+      BEGIN
+      CREATE TABLE [dbo].[pbs_CLIENT_DOC](
+      [LINE_NO] [int] IDENTITY(1,1) NOT NULL,
+      [SUBMIT_TIME] [datetime] NOT NULL,
+      [WORK_STATION] [nvarchar](50) NOT NULL,
+      [USER_ID] [varchar](50) NOT NULL,
+      [LOCAL_DOC_URL] [varchar](350) NOT NULL,
+      [CLOUND_DOC_URL] [varchar](350) NOT NULL,
+      [PROCESSING_STATUS] [varchar](15) NOT NULL,
+      [REFERENCE] [varchar](15) NOT NULL,
+      [DESCRIPTION] [nvarchar](250) NOT NULL,
+      [CLIENT_CODE] [varchar](15) NOT NULL,
+      [EMP_CODE] [varchar](15) NOT NULL,
+      [PROJECT_CODE] [varchar](15) NOT NULL,
+      [DOC_TYPE] [varchar](15) NOT NULL,
+      [DOC_DATE] [int] NOT NULL,
+      [CONTRACT_CODE] [varchar](15) NOT NULL,
+      [UPDATED] [int] NOT NULL,
+      [UPDATED_BY] [varchar](15) NOT NULL,
+      CONSTRAINT [PK_pbs_CLIENT_DOC] PRIMARY KEY CLUSTERED
+      (
+      [LINE_NO] ASC
+      )
+      )
+      END
+    </Install>
+  </DBO>
+  <DBO name="pbs_CLIENT_DOC_Insert" type="P">
+    <Install>
+      IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[pbs_CLIENT_DOC_Insert]') AND OBJECTPROPERTY(id,N'IsProcedure') = 1)
+      BEGIN
+      EXEC dbo.sp_executesql @statement = N'
+      CREATE PROCEDURE [dbo].[pbs_CLIENT_DOC_Insert]
+      @LINE_NO int output,
+      @SUBMIT_TIME datetime,
+      @WORK_STATION nvarchar (50),
+      @USER_ID varchar(50),
+      @LOCAL_DOC_URL varchar(350),
+      @CLOUND_DOC_URL varchar(350),
+      @PROCESSING_STATUS varchar(15),
+      @REFERENCE varchar(15),
+      @DESCRIPTION nvarchar (250),
+      @CLIENT_CODE varchar(15),
+      @EMP_CODE varchar(15),
+      @PROJECT_CODE varchar(15),
+      @DOC_TYPE varchar(15),
+      @DOC_DATE int,
+      @CONTRACT_CODE varchar(15),
+      @UPDATED int,
+      @UPDATED_BY varchar(15)
+      AS
+
+      SET NOCOUNT ON
+      INSERT INTO [dbo].[pbs_CLIENT_DOC] ([SUBMIT_TIME],
+      [WORK_STATION],
+      [USER_ID],
+      [LOCAL_DOC_URL],
+      [CLOUND_DOC_URL],
+      [PROCESSING_STATUS],
+      [REFERENCE],
+      [DESCRIPTION],
+      [CLIENT_CODE],
+      [EMP_CODE],
+      [PROJECT_CODE],
+      [DOC_TYPE],
+      [DOC_DATE],
+      [CONTRACT_CODE],
+      [UPDATED],
+      [UPDATED_BY])
+      VALUES (@SUBMIT_TIME,
+      @WORK_STATION,
+      @USER_ID,
+      @LOCAL_DOC_URL,
+      @CLOUND_DOC_URL,
+      @PROCESSING_STATUS,
+      @REFERENCE,
+      @DESCRIPTION,
+      @CLIENT_CODE,
+      @EMP_CODE,
+      @PROJECT_CODE,
+      @DOC_TYPE,
+      @DOC_DATE,
+      @CONTRACT_CODE,
+      @UPDATED,
+      @UPDATED_BY)
+
+      SET @LINE_NO = SCOPE_IDENTITY()
+
+      '
+      END
+    </Install>
+  </DBO>
+  <DBO name="pbs_CLIENT_DOC_Update" type="P">
+    <Install>
+      IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[pbs_CLIENT_DOC_Update]') AND OBJECTPROPERTY(id,N'IsProcedure') = 1)
+      BEGIN
+      EXEC dbo.sp_executesql @statement = N'
+      CREATE PROCEDURE [dbo].[pbs_CLIENT_DOC_Update]
+      @LINE_NO int,
+      @SUBMIT_TIME datetime,
+      @WORK_STATION nvarchar (50),
+      @USER_ID varchar(50),
+      @LOCAL_DOC_URL varchar(350),
+      @CLOUND_DOC_URL varchar(350),
+      @PROCESSING_STATUS varchar(15),
+      @REFERENCE varchar(15),
+      @DESCRIPTION nvarchar (250),
+      @CLIENT_CODE varchar(15),
+      @EMP_CODE varchar(15),
+      @PROJECT_CODE varchar(15),
+      @DOC_TYPE varchar(15),
+      @DOC_DATE int,
+      @CONTRACT_CODE varchar(15),
+      @UPDATED int,
+      @UPDATED_BY varchar(15)
+      AS
+
+      SET NOCOUNT ON
+      UPDATE [dbo].[pbs_CLIENT_DOC] SET [SUBMIT_TIME] = @SUBMIT_TIME,
+      [WORK_STATION] = @WORK_STATION,
+      [USER_ID] = @USER_ID,
+      [LOCAL_DOC_URL] = @LOCAL_DOC_URL,
+      [CLOUND_DOC_URL] = @CLOUND_DOC_URL,
+      [PROCESSING_STATUS] = @PROCESSING_STATUS,
+      [REFERENCE] = @REFERENCE,
+      [DESCRIPTION] = @DESCRIPTION,
+      [CLIENT_CODE] = @CLIENT_CODE,
+      [EMP_CODE] = @EMP_CODE,
+      [PROJECT_CODE] = @PROJECT_CODE,
+      [DOC_TYPE] = @DOC_TYPE,
+      [DOC_DATE] = @DOC_DATE,
+      [CONTRACT_CODE] = @CONTRACT_CODE,
+      [UPDATED] = @UPDATED,
+      [UPDATED_BY] = @UPDATED_BY
+      WHERE [LINE_NO] = @LINE_NO
+      '
+      END
+    </Install>
+  </DBO>
+  
+  <!--DOCUMENT PROCESS-->
+  <DBO name="pbs_DOC_PROCESS" type="U">
+    <Install>
+      IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id=OBJECT_ID(N'dbo.[pbs_DOC_PROCESS]'))
+      BEGIN
+      CREATE TABLE [dbo].[pbs_DOC_PROCESS](
+      [LINE_NO] [int] IDENTITY(1,1) NOT NULL,
+      [CLIENT_DOC_ID] [int] NOT NULL,
+      [PROCESSING_DATE] [datetime] NOT NULL,
+      [PROCESSING_OPERATION] [varchar](15) NOT NULL,
+      [PROCESSING_BY] [nvarchar](50) NOT NULL,
+      [STATUS] [varchar](15) NOT NULL,
+      [COMMENT] [nvarchar](1000) NOT NULL,
+      [UPDATED] [datetime] NOT NULL,
+      CONSTRAINT [PK_pbs_DOC_PROCESS] PRIMARY KEY CLUSTERED
+      (
+      [LINE_NO] ASC
+      )
+      )
+      END
+    </Install>
+  </DBO>
+  <DBO name="pbs_DOC_PROCESS_Insert" type="P">
+    <Install>
+      IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[pbs_DOC_PROCESS_Insert]') AND OBJECTPROPERTY(id,N'IsProcedure') = 1)
+      BEGIN
+      EXEC dbo.sp_executesql @statement = N'
+      CREATE PROCEDURE [dbo].[pbs_DOC_PROCESS_Insert]
+      @LINE_NO int output,
+      @CLIENT_DOC_ID int,
+      @PROCESSING_DATE datetime,
+      @PROCESSING_OPERATION varchar(15),
+      @PROCESSING_BY nvarchar (50),
+      @STATUS varchar(15),
+      @COMMENT nvarchar (1000),
+      @UPDATED datetime
+      AS
+
+      SET NOCOUNT ON
+      INSERT INTO [dbo].[pbs_DOC_PROCESS] ([CLIENT_DOC_ID],
+      [PROCESSING_DATE],
+      [PROCESSING_OPERATION],
+      [PROCESSING_BY],
+      [STATUS],
+      [COMMENT],
+      [UPDATED])
+      VALUES (@CLIENT_DOC_ID,
+      @PROCESSING_DATE,
+      @PROCESSING_OPERATION,
+      @PROCESSING_BY,
+      @STATUS,
+      @COMMENT,
+      @UPDATED)
+
+      SET @LINE_NO = SCOPE_IDENTITY()
+
+      '
+      END
+    </Install>
+  </DBO>
+  <DBO name="pbs_DOC_PROCESS_Update" type="P">
+    <Install>
+      IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[pbs_DOC_PROCESS_Update]') AND OBJECTPROPERTY(id,N'IsProcedure') = 1)
+      BEGIN
+      EXEC dbo.sp_executesql @statement = N'
+      CREATE PROCEDURE [dbo].[pbs_DOC_PROCESS_Update]
+      @LINE_NO int,
+      @CLIENT_DOC_ID int,
+      @PROCESSING_DATE datetime,
+      @PROCESSING_OPERATION varchar(15),
+      @PROCESSING_BY nvarchar (50),
+      @STATUS varchar(15),
+      @COMMENT nvarchar (1000),
+      @UPDATED datetime
+      AS
+
+      SET NOCOUNT ON
+      UPDATE [dbo].[pbs_DOC_PROCESS] SET [CLIENT_DOC_ID] = @CLIENT_DOC_ID,
+      [PROCESSING_DATE] = @PROCESSING_DATE,
+      [PROCESSING_OPERATION] = @PROCESSING_OPERATION,
+      [PROCESSING_BY] = @PROCESSING_BY,
+      [STATUS] = @STATUS,
+      [COMMENT] = @COMMENT,
+      [UPDATED] = @UPDATED
+      WHERE [LINE_NO] = @LINE_NO
+      '
+      END
+    </Install>
+  </DBO>
+</Root>
